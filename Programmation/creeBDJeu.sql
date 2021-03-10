@@ -90,18 +90,13 @@ CONSTRAINT idAnswer PRIMARY KEY (idQuestion,idReponse),
 FOREIGN KEY (idQuestion) REFERENCES bankQuestion(idQuestion)
 )ENGINE=INNODB CHARACTER SET utf8;
 
---Table banque de NOM :
-
+--Table banque de NOM et PRENOM :
+--Selection aléa du nom et prénom selon l'id (un entier), indépendemment pour l'un et l'autre
 CREATE TABLE bankNom
-(idPersonnage INT NOT NULL,
+(genre INT NOT NULL,
+id INT NOT NULL,
 nom VARCHAR(25),
-CONSTRAINT idNom PRIMARY KEY (idPersonnage,nom)
-)ENGINE=INNODB CHARACTER SET utf8;
-
---Table banque de PRENOM :
-
-CREATE TABLE bankPrenom
-(idPersonnage INT NOT NULL,
 prenom VARCHAR(25),
-CONSTRAINT idNom PRIMARY KEY (idPersonnage,prenom)
+CONSTRAINT idPersonne PRIMARY KEY (id)
 )ENGINE=INNODB CHARACTER SET utf8;
+
