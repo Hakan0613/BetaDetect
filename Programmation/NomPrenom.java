@@ -4,11 +4,12 @@ import java.util.*;
 public class NomPrenom {
 	private String nom;
     private String prenom; 
-	
+	DAOJeu monDAO = new DAOJeu();
+    monDAO.getConnect("org.mariadb.jdbc.Driver", "jdbc:mariadb://localhost:3307/projetjeujava", "root", "");
 
     //Constructeur qui permet la selection aleatoire du nom et prénom d'un personnage pour un id Personnage donnée.
 
-	private personnage (int genre)
+	private personnage (int genre)     //genre == 1 si c'est un homme, 0 sinon
 	{
 		Random rand = new Random();
 		int nbAleaPrenom = rand.nextInt(100);     //la valeur 100 doit etre remplacer par une requette SQL qui compte le nombre de prenom dispo dans la BD
@@ -21,18 +22,16 @@ public class NomPrenom {
     //Méthode permettant de récuperer le prenom depuis la BD
     private String setPrenom(int nbalea, int genre)
     {
-        String requette = "SELECT prenom FROM bankNomPrenom WHERE numero =" + (String) nbalea +"AND genre = " + (String) genre;
-        RequetteBD prenomBD = new RequetteBD;     //Class requette BD à crée pour execution
-        String prenom = prenomBD.execute(requette);
+        String requette = "SELECT prenom FROM bankNomPrenom WHERE id =" + (String) nbalea +"AND genre = " + (String) genre;
+        String prenom = monDAO.dosearch(requette);
         return prenom;        
     }
 
     //Méthode permettant de récuperer le nom depuis la BD
     private String setNom(int nbalea, int genre)
     {
-        String requette = "SELECT nom FROM bankNomPrenom WHERE numero =" + (String) nbalea +"AND genre = " + (String) genre;
-        RequetteBD nomBD = new RequetteBD;     //Class requette BD à crée pour execution
-        String nom = nomBD.execute(requette);
+        String requette = "SELECT nom FROM bankNomPrenom WHERE id =" + (String) nbalea +"AND genre = " + (String) genre;
+        String prenom = monDAO.dosearch(requette);
         return nom;
     }
 

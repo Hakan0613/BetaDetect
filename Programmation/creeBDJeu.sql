@@ -92,7 +92,7 @@ FOREIGN KEY (idQuestion) REFERENCES bankQuestion(idQuestion)
 
 --Table banque de NOM et PRENOM :
 --Selection aléa du nom et prénom selon l'id (un entier), indépendemment pour l'un et l'autre
-CREATE TABLE bankNom
+CREATE TABLE bankNomPrenom
 (genre INT NOT NULL,
 id INT NOT NULL,
 nom VARCHAR(25),
