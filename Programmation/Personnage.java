@@ -1,94 +1,33 @@
 package personnes;
 import java.util.*;
 
-//Les nom et prÃ©nom sont selctionner alÃ©atoirement depuis la classe NomPrenom et ajoutÃ© Ã  une nouvel table de la BD 
+//Les nom et prénom sont selctionner aléatoirement depuis la classe NomPrenom et ajouté à la table personnage de la BD 
 //(pour qu'elle reste sauvegarder)
-//toute les donnÃ©es personnages seront stocker dans la BD
+//toute les données personnages seront stocker dans la BD
 
 public class Personnage {
-    private int idPersonnage;
-    private String nomPersonnage;
-    private String prenomPersonnage;
-	private String lien; // Lien avec le PP : Epouse, soeur, preteur sur gage, ami, victime, mÃ©decin, gÃ©rant
-	private boolean culpabilite; // DÃ©signe false s'il est innocent et true dans le cas contraire
-	private String description; // Age, groupe sangain, alibi, Se met Ã  jour au fur et Ã  mesure de l'enquete
-	
-    /*Dans l'odre les personnages :
-    id=1 => Personnage principal (PP)
-    id=2 => Epouse du PP
-    id=3 => Soeur du PP
-    id=4 => Assistante du joueur (dÃ©tective)
-    id=5 => Voisine du PP
-    id=6 => Ami du PP
-    id=7 => Agent de police
-    id=8 => EmployÃ© du casino
-    id=9 => Gerant du casino
-    id=10 => Preteur sur gage
-    id=11 => Medecin lÃ©giste
-    id=12 => EmployÃ© de banque
-    id=13 => Le joueur (Nom PrÃ©nom choisit par le joueur)
-    ...
+	private ArrayList<String[]> personne; 
+    /*Description de la var personne:
+      -L'index de l'arrayList correspond à l'id du personnage
+      -Le premier élement du tableau de String est le nom et prénom
+      -Dans l'ordre la suite : lien du personnage avec le PP, culpabilté (1 si vrai, 0 si faux), description (Concaténation des infos trouver par le joueur)
+      Pour la liste des personnage voire plus bas dans le code
     */
 
-    //Connection Ã  la BD
+    //Connection à la BD
     DAOJeu monDAO = new DAOJeu();
     monDAO.getConnect("org.mariadb.jdbc.Driver", "jdbc:mariadb://localhost:3307/projetjeujava", "root", "");
 
-    //Construteur : l'ensemble des nom et prÃ©nom sont sÃ©lectionner alÃ©atoirement puis ajouter (Set) dans la BD
-    //Les trois premiers ID sont destiner Ã  la famille du PP
+    //Construteur : l'ensemble des nom et prénom sont sélectionner aléatoirement puis ajouter (Set) dans la BD
+    //Les trois premiers ID sont destiner à la famille du PP
     private personnage() 
     {
-        //Initialisation de la famille
-            //Set du nom de famille du PP et son Ã©pouse
-        NomPrenom nomFamillePP = new NomPrenom(1);
-        String nomFamille = nomFamillePP.getNom();
-        String requette = ("UPDATE personnage SET nom = " + nomFamille + "WHERE id IN (1,2)");   
-        monDAO.doUpdate(requette);
+        ArrayList<String> personne = new ArrayList<String>();    
+        NomPrenom creeNomPrenom = new NomPrenom;
+        creeNomPrenom.initPresonnage();
         
-            //Set du prenom du PP
-        String prenom = nomFamillePP.getPrenom();
-        String requette = ("UPDATE personnage SET prenom = " + prenom +"WHERE id IN 1"); 
-        monDAO.doUpdate(requette);  
-        
-            //Set du prenom de l'Ã©pouse du PP
-        NomPrenom nomFamillePP = new NomPrenom(0);
-        String prenom = nomFamillePP.getPrenom();
-        String requette = ("UPDATE personnage SET nom = " + prenom +"WHERE id IN 2");  
-        monDAO.doUpdate(requette);
-        //Fin initialisation de la famille du PP
 
-        //Initialisation des personnage fÃ©minin
-        for(int i = 3, i <=5, i++ )
-        {
-            Boolean existe = True;
-            //Verifcation s'il le nom a Ã©tait dÃ©jÃ  attribuer
-            while (existe)
-            {
-                NomPrenom newPersonnage = new NomPrenom(0);
-                String prenom = newPersonnage.getPrenom();
-                String requette = ("SELECT idPersonnage FROM personnage WHERE prenom = " + prenom);
-                Int verif = monDAO.dosearch(requette);
-                if(verif != 1)
-                {
-                    existe = False;
-                }
-            }
-            String nom = newPersonnage.getNom();
-            String requette = ("UPDATE personnage SET prenom = " + prenom + ", nom = " + nom + " WHERE id = " + i);
-            monDAO.doUpdate(requette);
-        }
-        //Fin initialisation des personnage fÃ©minin
-
-        //Initialisation des personnage masculin
-        for(int i = 6, i <=12, i++ )
-        {
-            NomPrenom newPersonnage = new NomPrenom(1);
-            String prenom = newPersonnage.getPrenom();
-            String nom = newPersonnage.getNom();
-            String requette = ("UPDATE personnage SET prenom = " + prenom + ", nom = " + nom + " WHERE id = " + i);
-            monDAO.doUpdate(requette);
-        }
-        //Fin initialisation des personnage masculin
+    
 
 
 
@@ -96,3 +35,19 @@ public class Personnage {
 
     }
 }
+/*Dans l'odre les personnages :
+id=1 => Personnage principal (PP)
+id=2 => Epouse du PP
+id=3 => Soeur du PP
+id=4 => Assistante du joueur (détective)
+id=5 => Voisine du PP
+id=6 => Ami du PP
+id=7 => Agent de police
+id=8 => Employé du casino
+id=9 => Gerant du casino
+id=10 => Preteur sur gage
+id=11 => Medecin légiste
+id=12 => Employé de banque
+id=13 => Le joueur (Nom Prénom choisit par le joueur)
+...
+*/
