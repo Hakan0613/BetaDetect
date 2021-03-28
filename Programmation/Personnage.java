@@ -1,53 +1,84 @@
 package personnes;
+import java.sql.SQLException;
 import java.util.*;
 
-//Les nom et prÈnom sont selctionner alÈatoirement depuis la classe NomPrenom et ajoutÈ ‡ la table personnage de la BD 
+//Les nom et pr√©nom sont selctionner al√©atoirement depuis la classe NomPrenom et ajout√© √† la table personnage de la BD 
 //(pour qu'elle reste sauvegarder)
-//toute les donnÈes personnages seront stocker dans la BD
+//toute les donn√©es personnages seront stocker dans la BD
 
 public class Personnage {
 	private ArrayList<String[]> personne; 
-    /*Description de la var personne:
-      -L'index de l'arrayList correspond ‡ l'id du personnage
-      -Le premier Èlement du tableau de String est le nom et prÈnom
-      -Dans l'ordre la suite : lien du personnage avec le PP, culpabiltÈ (1 si vrai, 0 si faux), description (ConcatÈnation des infos trouver par le joueur)
+    /*Description de la variable personne:
+      -L'index de l'arrayList correspond √† l'id du personnage
+      -Le premier √©lement du tableau de String est le nom et pr√©nom
+      -Dans l'ordre la suite : lien du personnage avec le PP (ou role), culpabilt√© (1 si vrai, 0 si faux), description (Concat√©nation des infos trouver par le joueur)
       Pour la liste des personnage voire plus bas dans le code
     */
 
-    //Connection ‡ la BD
-    DAOJeu monDAO = new DAOJeu();
-    monDAO.getConnect("org.mariadb.jdbc.Driver", "jdbc:mariadb://localhost:3307/projetjeujava", "root", "");
-
-    //Construteur : l'ensemble des nom et prÈnom sont sÈlectionner alÈatoirement puis ajouter (Set) dans la BD
-    //Les trois premiers ID sont destiner ‡ la famille du PP
-    private personnage() 
-    {
-        ArrayList<String> personne = new ArrayList<String>();    
-        NomPrenom creeNomPrenom = new NomPrenom;
-        creeNomPrenom.initPresonnage();
-        
-
+    //Connection √† la BD
     
-
-
-
-
-
+    
+    //Construteur : l'ensemble des nom et pr√©nom sont s√©lectionner al√©atoirement puis ajouter (Set) dans la BD
+    //Les trois premiers ID sont destiner √† la famille du PP
+    public Personnage()
+    { 
+	    personne = new ArrayList<String[]>();
+	    //Debut g√©neration des nom et prenom et renseignement des infos
+	    NomPrenom creeNomPrenom = new NomPrenom();
+	    try {
+			creeNomPrenom.initPersonnage();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    ArrayList<String> listePseudo = creeNomPrenom.getListePseudo();
+	    String[] lien = {"Personnage Principale", "Epouse", "Soeur", "Assistante", "Voisine", "Ami", "Agent de police", "Employ√© du Casino", "Gerant du Casino", "Preteur sur gage", "Medecin l√©giste", "Employe de banque", "Le joueur"};
+	    String[] culpabilit√© = {"0","0","0","0","0","0","0","0","0","1","0","0","0",};
+	    
+	    
+	    for(int i = 0; i<13; i++)
+	    {
+	    	String[] temp = new String[3];
+	    	temp[0]= listePseudo.get(i);
+	        temp[1] = lien[i];
+	        temp[2] = culpabilit√©[i];
+	        this.personne.add(i, temp);
+	        
+	    }
+	    //Fin : personnage renseigner
     }
+    
+    //Les getteur : au choix
+
+    public String[] getListePersonnage(int idPersonnage)
+    {
+    	return this.personne.get(idPersonnage-1);
+    }
+    
+    //Attention la liste vas de 0 √† 12 !
+    public ArrayList<String[]> getListePersonnage()
+    {
+    	return this.personne;
+    }
+    
 }
+
+
+
+
 /*Dans l'odre les personnages :
 id=1 => Personnage principal (PP)
 id=2 => Epouse du PP
 id=3 => Soeur du PP
-id=4 => Assistante du joueur (dÈtective)
+id=4 => Assistante du joueur (d√©tective)
 id=5 => Voisine du PP
 id=6 => Ami du PP
 id=7 => Agent de police
-id=8 => EmployÈ du casino
+id=8 => Employ√© du casino
 id=9 => Gerant du casino
 id=10 => Preteur sur gage
-id=11 => Medecin lÈgiste
-id=12 => EmployÈ de banque
-id=13 => Le joueur (Nom PrÈnom choisit par le joueur)
+id=11 => Medecin l√©giste
+id=12 => Employ√© de banque
+id=13 => Le joueur (Nom Pr√©nom choisit par le joueur)
 ...
 */
